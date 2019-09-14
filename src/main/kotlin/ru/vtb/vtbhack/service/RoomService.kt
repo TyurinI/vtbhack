@@ -20,4 +20,8 @@ class RoomService(
 //        logger.info { user.rooms?.size }
         return user.toShortRoomsResponse()
     }
+
+    fun getRoomInfo(roomId: Long): Room {
+        return roomRepository.findById(roomId).get()
+    }
 }

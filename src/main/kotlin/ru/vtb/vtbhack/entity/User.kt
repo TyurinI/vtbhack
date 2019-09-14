@@ -26,8 +26,11 @@ data class User(
         this.rooms?.forEach {
             response.add(RoomsResponseDTO(
                     title = it.title,
-                    isActual = it.endTime > Date()
-            ))
+                    isActual = it.endTime > Date(),
+                    startTime = it.startTime,
+                    endTime = it.endTime
+            )
+            )
         }
         return response
     }
