@@ -31,6 +31,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compile ("io.github.microutils:kotlin-logging:1.7.6")
+    implementation("com.twilio.sdk:twilio:7.20.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.50")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

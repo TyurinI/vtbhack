@@ -11,11 +11,12 @@ data class User(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
-
-        @Column
+        val firstName:String,
+        val secondName:String,
+        @Column(unique = true)
         val email: String,
-        @Column
         val password: String,
+        val uuid: UUID = UUID.randomUUID(),
 
         @ManyToMany(mappedBy = "usrs", fetch = FetchType.LAZY)
         @JsonIgnore
