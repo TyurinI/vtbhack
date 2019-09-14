@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 
 data class RoomsResponseDTO(
+        @JsonProperty("id") val id: Long?,
         @JsonProperty("title") val title: String,
         @JsonProperty("is_actual") val isActual: Boolean,
         @JsonProperty("start_time") val startTime: Date,

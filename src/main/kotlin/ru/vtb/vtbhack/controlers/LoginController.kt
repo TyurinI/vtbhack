@@ -24,7 +24,8 @@ class LoginController(@Autowired val usersRepository: UsersRepository) {
     fun login(@RequestBody loginDTO: LoginDTO): CredentialsDTO {
         val oldUser = usersRepository.findByEmailAndPassword(loginDTO.email, loginDTO.password)
         return if (oldUser != null) {
-            CredentialsDTO(oldUser.id!!, oldUser.uuid, oldUser.firstName, oldUser.secondName, oldUser.email)
+            CredentialsDTO(oldUser.id!!, oldUser.uuid,
+                    oldUser.email, oldUser.firstName, oldUser.secondName)
         } else {
             var newUser = loginDTO.toUser()
             newUser = usersRepository.save(newUser)
@@ -37,7 +38,7 @@ class LoginController(@Autowired val usersRepository: UsersRepository) {
         val random = Random().nextInt(9999 - 1000) + 1000
         val answer: String? = restTemplate.getForObject(
                 "http://smsc.ru/sys/send.php?" +
-                    "login=elin&psw=20002000&phones=$phone&mes=$random", String::class)
+                        "login=elin&psw=20002000&phones=$phone&mes=$random", String::class)
 
     }
 

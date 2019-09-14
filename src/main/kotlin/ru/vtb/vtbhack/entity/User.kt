@@ -26,6 +26,7 @@ data class User(
         val response = mutableListOf<RoomsResponseDTO>()
         this.rooms?.forEach {
             response.add(RoomsResponseDTO(
+                    id = it.id,
                     title = it.title,
                     isActual = it.endTime > Date(),
                     startTime = it.startTime,
