@@ -17,7 +17,6 @@ class RoomService(
 
     fun getRoomsRelatedToUser(userId: Long): List<RoomsResponseDTO> {
         val user = usersRepository.findById(userId).get()
-//        logger.info { user.rooms?.size }
         return user.toShortRoomsResponse()
     }
 

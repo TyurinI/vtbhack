@@ -1,6 +1,7 @@
 package ru.vtb.vtbhack.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import ru.vtb.vtbhack.DTO.VotingDTO
 import javax.persistence.*
 
 @Entity
@@ -19,7 +20,16 @@ data class Voting(
         @OneToMany(mappedBy = "voting")
         @JsonIgnore
         val answers: List<Answer>
-)
+) {
+    fun toDTO(): VotingDTO {
+        return VotingDTO(
+                id = this.id,
+                title = this.title,
+                type = this.type,
+                answers = this.answers
+        )
+    }
+}
 
 @Entity
 @Table

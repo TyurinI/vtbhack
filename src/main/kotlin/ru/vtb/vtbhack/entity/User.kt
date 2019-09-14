@@ -28,7 +28,9 @@ data class User(
                     title = it.title,
                     isActual = it.endTime > Date(),
                     startTime = it.startTime,
-                    endTime = it.endTime
+                    endTime = it.endTime,
+                    userCount = it.usrs.size,
+                    fileCount = 42
             )
             )
         }

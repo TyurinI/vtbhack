@@ -7,10 +7,10 @@ import ru.vtb.vtbhack.DTO.GetRoomsDTO
 import ru.vtb.vtbhack.DTO.LoginDTO
 import ru.vtb.vtbhack.persistence.UsersRepository
 private val logger = KotlinLogging.logger {}
-@RestController("/api")
+@RestController
 class LoginController (@Autowired val usersRepository: UsersRepository){
 
-    @RequestMapping(method = [RequestMethod.POST], name = "/login")
+    @PostMapping("/api/login")
     fun login(@RequestBody loginDTO: LoginDTO): GetRoomsDTO {
         val newUser = loginDTO.toUser()
         usersRepository.save(newUser)

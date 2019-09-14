@@ -8,16 +8,16 @@ import ru.vtb.vtbhack.entity.Room
 import ru.vtb.vtbhack.service.RoomService
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping
 class RoomController(
         @Autowired val roomService: RoomService
 ){
-    @PostMapping("/rooms")
+    @PostMapping("/api/rooms")
     fun getRoomsRelatedToUser(@RequestBody getRoomsDTO: GetRoomsDTO): List<RoomsResponseDTO> {
         return roomService.getRoomsRelatedToUser(getRoomsDTO.userId)
     }
 
-    @GetMapping("/room/{roomId}")
+    @GetMapping("/api/room/{roomId}")
     fun getRoom(@PathVariable roomId:Long): Room {
         return roomService.getRoomInfo(roomId)
     }
