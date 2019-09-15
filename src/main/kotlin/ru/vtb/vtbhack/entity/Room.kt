@@ -2,6 +2,7 @@ package ru.vtb.vtbhack.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.Expose
 import org.springframework.jdbc.core.JdbcTemplate
 import ru.vtb.vtbhack.DTO.FullRoomDTO
 import ru.vtb.vtbhack.DTO.RoomInfoDTO
@@ -15,11 +16,12 @@ data class Room(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
 
-        @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+        @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
         @JsonIgnore
+        @Expose
         val usrs: MutableList<User> = mutableListOf(),
 
-        @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "room")
         val votings: MutableList<Voting> = mutableListOf(),
 
         @OneToMany(mappedBy = "room")

@@ -44,4 +44,9 @@ class RoomController(
     fun getRoom(@PathVariable roomId: Long): Room {
         return roomService.getRoomInfo(roomId)
     }
+
+    @PostMapping("/api/room/save")
+    fun saveRoom(@RequestBody room:Room){
+        roomService.save(room);
+    }
 }

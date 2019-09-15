@@ -1,33 +1,23 @@
 package ru.vtb.vtbhack.socket
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import mu.KotlinLogging
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
-import ru.vtb.vtbhack.entity.User
-import ru.vtb.vtbhack.entity.Voting
-import ru.vtb.vtbhack.persistence.AnswerRepository
 import ru.vtb.vtbhack.persistence.VotingRepository
-import ru.vtb.vtbhack.service.StatisticService
-import java.util.concurrent.atomic.AtomicLong
-import kotlin.math.log
 
 private val logger = KotlinLogging.logger {}
 
 class Message(val type: String, val votings: Any)
-class SessionInfo(val id: Int, val roomId: Int)
+class SessionInfo(val id: Long, val roomId: Long)
 
 @Component
-class RoomHandler : TextWebSocketHandler() {
-    @Autowired
-    lateinit var answerRepository: AnswerRepository
-    @Autowired
-    lateinit var votingRepository: VotingRepository
+class RoomHandler(val votingRepository: VotingRepository, val jdbcTemplate: JdbcTemplate) : TextWebSocketHandler() {
 
     val sessionList = HashMap<WebSocketSession, SessionInfo>()
 
@@ -41,32 +31,48 @@ class RoomHandler : TextWebSocketHandler() {
     }
 
     public override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
-        val json = ObjectMapper().readTree(message.payload)
-        when (json.get("type").asText()) {
+        val json = Gson().fromJson(message.payload, WsMessage::class.java)
+        when (json.type) {
             "join" -> {
-                logger.info { json }
-                val id = json.get("user_id").textValue().toInt()
-                logger.info { id }
-                val roomId = json.get("room_id").textValue().toInt()
-                logger.info { roomId }
-                sessionList[session] = SessionInfo(id, roomId)
+//                logger.info { json }
+//                val id = json.userId
+//                logger.info { id }
+//                val roomId = json.roomId
+//                logger.info { roomId }
+//                sessionList[session] = SessionInfo(id, roomId)
             }
             "vote" -> {
                 logger.info { json }
-                val currentRoomId = json.get("room_id").textValue().toInt()
-                val answerId = json.get("answer_id").textValue().toInt()
-                if (json.get("increment").textValue().toInt() == 1) {
-                    answerRepository.increment(answerId.toLong())
+                val id = json.userId
+                logger.info { id }
+                val roomId = json.roomId
+                logger.info { roomId }
+                sessionList[session] = SessionInfo(id, roomId)
+                logger.info { json }
+                val currentRoomId = json.roomId
+                val answerId = json.answerId
+                if (json.increment == 1) {
+                    jdbcTemplate.execute("UPDATE answer set voted = voted + 1 WHERE id = ${answerId.toLong()}")
                 } else {
-                    answerRepository.decrement(answerId.toLong())
+                    jdbcTemplate.execute("UPDATE answer set voted = voted - 1 WHERE id = ${answerId.toLong()}")
                 }
-                val groupList = sessionList.filter { it.value.roomId == currentRoomId }.map { it.key }.toList()
-                broadcast(groupList, Message("VOTE", votingRepository.findAllByRoomId(currentRoomId.toLong())))
+//                val groupList = sessionList.filter { it.value.roomId == currentRoomId }.map { it.key }.toList()
+                val votings = votingRepository.getvot(currentRoomId)
+                logger.info { votings }
+//                broadcast(groupList, Message("VOTE", votings))
+                broadcast(sessionList.keys.toList(), Message("VOTE", votings))
             }
         }
     }
 
-    fun emit(session: WebSocketSession, msg: Message) = session.sendMessage(TextMessage(jacksonObjectMapper().writeValueAsString(msg)))
+    fun emit(session: WebSocketSession, msg: Message) = session.sendMessage(TextMessage(Gson().toJson(msg)))
     fun broadcast(sessions: List<WebSocketSession>, msg: Message) = sessions.forEach { emit(it, msg) }
-//    fun broadcastToOthers(me: WebSocketSession, msg: Message) = sessionList.filterNot { it.key == me }.forEach { emit(it.key, msg) }
+    //    fun broadcastToOthers(me: WebSocketSession, msg: Message) = sessionList.filterNot { it.key == me }.forEach { emit(it.key, msg) }
+    data class WsMessage(
+            val type: String,
+            @SerializedName("user_id") val userId: Long,
+            @SerializedName("room_id") val roomId: Long,
+            @SerializedName("increment") val increment: Int,
+            @SerializedName("answer_id") val answerId: Int
+            )
 }

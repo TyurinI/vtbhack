@@ -1,6 +1,8 @@
 package ru.vtb.vtbhack.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.google.gson.annotations.Expose
+import org.springframework.data.repository.cdi.Eager
 import ru.vtb.vtbhack.DTO.RoomsResponseDTO
 import java.util.*
 import javax.persistence.*
@@ -19,8 +21,9 @@ data class User(
         val phone: String,
         val uuid: UUID = UUID.randomUUID(),
 
-        @ManyToMany(mappedBy = "usrs", fetch = FetchType.LAZY)
+        @ManyToMany(mappedBy = "usrs")
         @JsonIgnore
+        @Expose
         val rooms: MutableList<Room>? = mutableListOf()
 ) {
     fun toShortRoomsResponse(): List<RoomsResponseDTO> {

@@ -1,6 +1,7 @@
 package ru.vtb.vtbhack.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.google.gson.annotations.Expose
 import javax.persistence.*
 
 @Entity
@@ -14,9 +15,10 @@ class Voting(
 
         @ManyToOne
         @JsonIgnore
+        @Expose
         val room: Room,
 
-        @OneToMany(mappedBy = "voting", fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "voting")
         val answers: List<Answer> = mutableListOf()
 )
 
@@ -32,5 +34,6 @@ class Answer(
 
         @ManyToOne
         @JsonIgnore
+        @Expose
         val voting: Voting
 )

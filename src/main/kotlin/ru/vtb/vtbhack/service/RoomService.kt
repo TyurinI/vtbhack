@@ -32,4 +32,8 @@ class RoomService(
         if ("Token $userUuid" != token)
             throw PermissionDeniedException()
     }
+
+    fun save(room:Room){
+        roomRepository.save(room)
+    }
 }
