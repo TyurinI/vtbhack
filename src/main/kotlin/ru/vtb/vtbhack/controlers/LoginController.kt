@@ -13,7 +13,6 @@ import ru.vtb.vtbhack.DTO.CredentialsDTO
 import ru.vtb.vtbhack.DTO.LoginDTO
 import ru.vtb.vtbhack.persistence.UsersRepository
 import java.util.*
-import javax.xml.ws.Response
 
 
 private val logger = KotlinLogging.logger {}
@@ -57,7 +56,7 @@ class LoginController(@Autowired val usersRepository: UsersRepository) {
                             )
                     )
         } else {
-            return ResponseEntity.badRequest().body("Попробуйте еще раз")
+            return ResponseEntity.badRequest().body("Try again")
         }
     }
 

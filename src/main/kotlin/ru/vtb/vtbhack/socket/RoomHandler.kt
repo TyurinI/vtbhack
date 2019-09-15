@@ -45,7 +45,11 @@ class RoomHandler : TextWebSocketHandler() {
         when (json.get("type").asText()) {
             "join" -> {
                 logger.info { json }
-                sessionList[session] = SessionInfo(json.get("user_id").textValue().toInt(), json.get("room_id").textValue().toInt())
+                val id = json.get("user_id").textValue().toInt()
+                logger.info { id }
+                val roomId = json.get("room_id").textValue().toInt()
+                logger.info { roomId }
+                sessionList[session] = SessionInfo(id, roomId)
             }
             "vote" -> {
                 logger.info { json }
