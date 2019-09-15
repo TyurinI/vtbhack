@@ -13,7 +13,8 @@ data class LoginDTO(val email: String,
                 email = this.email,
                 password = this.password,
                 firstName = "lal",
-                secondName = "lal"
+                secondName = "lal",
+                phone = phone!!
         )
     }
 }

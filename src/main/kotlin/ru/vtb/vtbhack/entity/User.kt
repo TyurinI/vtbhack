@@ -16,6 +16,7 @@ data class User(
         @Column(unique = true)
         val email: String,
         val password: String,
+        val phone: String,
         val uuid: UUID = UUID.randomUUID(),
 
         @ManyToMany(mappedBy = "usrs", fetch = FetchType.LAZY)
