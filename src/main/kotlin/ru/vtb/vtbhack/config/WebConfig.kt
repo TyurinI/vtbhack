@@ -30,6 +30,6 @@ class WebConfig : WebMvcConfigurer {
 @EnableWebSocket
 class WSConfig : WebSocketConfigurer {
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(RoomHandler(), "/vote").withSockJS()
+        registry.addHandler(RoomHandler(), "/vote").setAllowedOrigins("*")
     }
 }

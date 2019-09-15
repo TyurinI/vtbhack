@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 import ru.vtb.vtbhack.DTO.VotingDTO
 import ru.vtb.vtbhack.entity.Voting
+import ru.vtb.vtbhack.persistence.AnswerRepository
 import ru.vtb.vtbhack.persistence.VotingRepository
 
 @RestController
@@ -14,6 +15,8 @@ class VotingController(
 ) {
      @GetMapping("/api/voting/{votingId}")
      fun getVoting(@PathVariable votingId:Long): Voting {
-         return votingRepository.findById(votingId).get()//.toDTO()
+         return votingRepository.findById(votingId).get()
      }
+
+
 }
