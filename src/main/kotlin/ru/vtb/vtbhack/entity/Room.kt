@@ -2,10 +2,11 @@ package ru.vtb.vtbhack.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.springframework.jdbc.core.JdbcTemplate
+import ru.vtb.vtbhack.DTO.FullRoomDTO
 import ru.vtb.vtbhack.DTO.RoomInfoDTO
 import java.util.*
 import javax.persistence.*
-
 
 @Entity
 @Table
@@ -16,15 +17,20 @@ data class Room(
 
         @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
         @JsonIgnore
-        var usrs: MutableList<User> = mutableListOf(),
+        val usrs: MutableList<User> = mutableListOf(),
+
+        @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+        val votings: MutableList<Voting> = mutableListOf(),
 
         @OneToMany(mappedBy = "room")
-        var votings: MutableList<Voting> = mutableListOf(),
+        val attachments: MutableList<Attachment> = mutableListOf(),
 
         @JsonProperty("title") val title: String,
+        @JsonProperty("description") val description: String,
         @JsonProperty("is_anonymous") val isAnonymous: Boolean = false,
         @JsonProperty("is_yes_no") val isYesNo: Boolean = false,
         @JsonProperty("start_time") val startTime: Date,
         @JsonProperty("end_time") val endTime: Date,
         @JsonProperty("is_auto") val isAuto: Boolean = false
 )
+

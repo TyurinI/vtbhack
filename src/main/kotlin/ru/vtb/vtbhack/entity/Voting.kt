@@ -1,12 +1,13 @@
 package ru.vtb.vtbhack.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import ru.vtb.vtbhack.DTO.VotingDTO
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import jdk.nashorn.internal.ir.annotations.Ignore
 import javax.persistence.*
 
 @Entity
 @Table
-data class Voting(
+class Voting(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
@@ -17,19 +18,18 @@ data class Voting(
         @JsonIgnore
         val room: Room,
 
-        @OneToMany(mappedBy = "voting")
-        @JsonIgnore
-        val answers: List<Answer>
-) {
-    fun toDTO(): VotingDTO {
-        return VotingDTO(
-                id = this.id,
-                title = this.title,
-                type = this.type,
-                answers = this.answers
-        )
-    }
-}
+        @OneToMany(mappedBy = "voting", fetch = FetchType.LAZY)
+        val answers: List<Answer> = mutableListOf()
+) //{
+//    fun toDTO(): VotingDTO {
+//        return VotingDTO(
+//                id = this.id,
+//                title = this.title,
+//                type = this.type,
+//                answers = this.answers
+//        )
+//    }
+//}
 
 @Entity
 @Table

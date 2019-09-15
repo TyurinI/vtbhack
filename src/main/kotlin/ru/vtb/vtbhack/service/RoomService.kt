@@ -3,6 +3,7 @@ package ru.vtb.vtbhack.service
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import ru.vtb.vtbhack.DTO.FullRoomDTO
 import ru.vtb.vtbhack.DTO.RoomsResponseDTO
 import ru.vtb.vtbhack.entity.Room
 import ru.vtb.vtbhack.exceptions.PermissionDeniedException
@@ -26,7 +27,7 @@ class RoomService(
     }
 
     fun checkUserPermissions(userId: Long, token: String) {
-        val userUuid= usersRepository.findById(userId).get().uuid
+        val userUuid = usersRepository.findById(userId).get().uuid
         logger.info { "$userUuid  $token" }
         if ("Token $userUuid" != token)
             throw PermissionDeniedException()

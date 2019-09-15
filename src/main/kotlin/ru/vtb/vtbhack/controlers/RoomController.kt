@@ -6,6 +6,7 @@ import org.springframework.dao.PermissionDeniedDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import ru.vtb.vtbhack.DTO.FullRoomDTO
 import ru.vtb.vtbhack.DTO.GetRoomsDTO
 import ru.vtb.vtbhack.DTO.RoomsResponseDTO
 import ru.vtb.vtbhack.entity.Room
